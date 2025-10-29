@@ -48,3 +48,33 @@ GRANT ALL PRIVILEGES ON DATABASE jan_lms_dev TO jan_lms_dev;
 GRANT ALL PRIVILEGES ON SCHEMA public TO jan_lms_dev;
 ```
 - connect to database \c databasename
+
+6. create folders, instructures before start flask
+````python
+#init.py
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+````
+````python
+#main.py
+from flask import Flask
+
+from init import db
+
+app = Flask(__name__)
+print("Flask Server Started.")
+app.config['SQLALCHEMY_DATABASE_URI'] = fabcd
+db.init_app(app)
+
+````
+
+7. Using flask blueprints from its website
+
+8. create .flaskenv file
+```
+FLASK_APP = main
+FLASK_DEBUG = 1
+FLASK_RUN_PORT = 8080
+```
+
