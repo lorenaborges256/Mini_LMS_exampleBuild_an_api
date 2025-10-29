@@ -17,7 +17,7 @@ def create_tables():
 #drop
 @db_commands.cli.command('drop')
 def drop_tables():
-    db.create_all()
+    db.drop_all()
     print("Tables dropped!!")
 
 #seed
