@@ -7,6 +7,7 @@ import os
 # load_dotenv()
 
 #run development phase
+from controllers.cli_controllers import db_commands
 
 def create_app():
     app = Flask(__name__)
@@ -17,6 +18,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 
     db.init_app(app)
+    app.register_blueprint(db_commands)
     return app
 
 
