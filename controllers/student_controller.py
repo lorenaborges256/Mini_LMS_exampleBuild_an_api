@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from init import db
 from models.student import Student, student_schema, students_schema
 
@@ -26,47 +26,50 @@ def get_students():
 @students_bp.route("/<int:student_id>")
 def get_students_byid(student_id):
     #define the statement: select * from students where id=student_id;
-    stmt = db.select(Student).where(Student.id == student_id)
+    stmt = db.select(Student).where(Student.student_id == student_id)
     #execute it
     student = db.session.scalar(stmt)
     #serialise it
     data = student_schema.dump(student)
     #return it 
+
     if data:         
         return jsonify(data)
     else:
         return {"message": f"Student with id: {student_id} does not exist!"}
     
 
-# # POST /students
-# @students_bp.route("/", methods=["POST"])
-# def create_students():
-#     #create detail from request body
-#     body_data = request.get_json()
-#     #create student object with the requested body data
-#     new_student = Student(
-#         name = body_data.get("name"),
-#         email = body_data.get("email"),
-#         address = body_data.get("address")
-#     )
-#     #add to the section
-#     db.session.add(new_student)
-#     #commit the session
-#     db.session.commit()
-#     #send Ack
-#     #creating a new variable to hold the serialised data
-#     data = student_schema.dump(new_student)
+# POST /students
+@students_bp.route("/", methods=["POST"])
+def create_students():
+    #get details from request body
+    body_data = request.get_json()
+    #create student object with the request body data
+    email = body_data.get("email")
+    stmt = db.select(Student).where(Student.email == email)
+    #adding to the session
+    student = db.session.scalar(stmt)
+    #checking the system with an email add 
+    data = student_schema.dump(student)
 
-#     #display message with same emailo add issues...
-#     if data: 
-#         return {"message": f"The Student email: {email} already exists. Please use a different email address."}, 409
-#     new_student = Student(
-#         name = body_data.get("name"),
-#         email = body_data.get("email"),
-#         address = body_data.get("address")
-#     )
-#     #calling data to convert with jsonify
-#     return jsonify(data)
+    #display message with the same email issue
+    if data: 
+        return {"message": f"The Student with email:{email} already exists."}
+
+    new_student = Student(
+        name = body_data.get("name"),
+        email = body_data.get("email"),
+        address = body_data.get("address")
+    )
+    #add to the section
+    db.session.add(new_student)
+    #commit the session
+    db.session.commit()
+    #send Ack
+    #creating a new variable to hold the serialised data
+    data = student_schema.dump(new_student)
+    #calling data to convert with jsonify
+    return jsonify(data) , 201
 
 
 

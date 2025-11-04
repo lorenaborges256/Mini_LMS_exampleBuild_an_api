@@ -80,3 +80,6 @@ FLASK_DEBUG = 1
 FLASK_RUN_PORT = 8080
 ```
 
+- Errors: 
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
