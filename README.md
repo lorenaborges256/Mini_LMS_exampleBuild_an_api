@@ -35,6 +35,8 @@ sudo -u postgres psql
 CREATE DATABASE jan_lms_db;
 ```
 - see all database in the system -> \l
+- see all users int he system -> \du
+
 - create user
 ```
 CREATE USER jan_lms_dev PASSWORD '123456';
