@@ -4,10 +4,7 @@ from models.student import Student
 
 db_commands = Blueprint('db', __name__)
 
-#commands
-
 #CLI commands
-
 #create
 @db_commands.cli.command('create')
 def create_tables():

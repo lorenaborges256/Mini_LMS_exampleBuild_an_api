@@ -2,7 +2,7 @@ from flask import Flask
 
 from init import db
 import os
-# from dotenv import load_dotenv # to initialize app.config['SQLALCHEMY_DATABASE_URI'] = fabcd
+# from dotenv import load_dotenv
 
 # load_dotenv()
 
@@ -18,11 +18,10 @@ def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 
-
-
     #import for connection at top and register here...
     db.init_app(app)
     app.register_blueprint(db_commands)
+    app.register_blueprint(students_bp)
     return app
 
 
