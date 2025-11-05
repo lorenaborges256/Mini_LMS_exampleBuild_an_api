@@ -102,14 +102,38 @@ def delete_student(student_id):
 # PUT/PATCH /students/id (EDIT the student details)
 @students_bp.route("/<int:student_id>", methods=["PUT", "PATCH"])
 def edit_student(student_id):
-    #Get the std from db first
-    #define statemnet
-    #exc the stmt
-    
-    #if the std exists
-        #fetch the info from the request body
-        # make the changes
-        #commit to the db
-        # ack
-    #else
-        # ack no record found
+    # Get the student from db first
+    stmt = db.select(Student).where(Student.student_id == student_id)
+    student = db.session.scalar(stmt)
+
+    # if the student does not exist, return 404
+    if not student:
+        return {"message": f"Student with id {student_id} does not exist."}, 404
+
+    # fetch the info from the request body
+    body_data = request.get_json()
+    name = body_data.get("name")
+    email = body_data.get("email")
+    address = body_data.get("address")
+
+    # if email is being changed, ensure it's unique
+    if email and email != student.email:
+        stmt = db.select(Student).where(Student.email == email)
+        existing = db.session.scalar(stmt)
+        if existing:
+            return {"message": f"The Student with email:{email} already exists."}, 400
+        student.email = email
+
+    # update other fields if provided
+    if name is not None:
+        student.name = name
+    if address is not None:
+        student.address = address
+
+    # persist changes
+    db.session.add(student)
+    db.session.commit()
+
+    # return the updated student
+    data = student_schema.dump(student)
+    return jsonify(data), 200
