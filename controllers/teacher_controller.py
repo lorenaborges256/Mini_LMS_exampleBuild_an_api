@@ -11,7 +11,7 @@ teachers_bp = Blueprint('teachers', __name__, url_prefix='/teachers')
 # GET/teachers
 @teachers_bp.route('/')
 def get_teachers():
-    #first define a statement: Select * from students;
+    #first define a statement: Select * from teachers;
     stmt = db.select(Teacher)
     #execute it
     teachers_list = db.session.scalars(stmt)
@@ -23,21 +23,21 @@ def get_teachers():
     else:
         return {"message": "No record found. Add a teachers to get started with system..."}
 
-# # GET /teachers/id
-# @teachers_bp.route("/<int:teacher_id>")
-# def get_teachers_byid(student_id):
-#     #define the statement: select * from students where id=student_id;
-#     stmt = db.select(Teacher).where(Teacher.student_id == student_id)
-#     #execute it
-#     student = db.session.scalar(stmt)
-#     #serialise it
-#     data = student_schema.dump(student)
-#     #return it 
+# GET /teachers/id
+@teachers_bp.route("/<int:teacher_id>")
+def get_teachers_byid(teacher_id):
+    #define the statement: select * from teachers where id=student_id;
+    stmt = db.select(Teacher).where(Teacher.teacher_id == teacher_id)
+    #execute it
+    teacher = db.session.scalar(stmt)
+    #serialise it
+    data = student_schema.dump(teacher)
+    #return it 
 
-#     if data:         
-#         return jsonify(data)
-#     else:
-#         return {"message": f"Teacher with id: {student_id} does not exist!"}
+    if data:         
+        return jsonify(data)
+    else:
+        return {"message": f"Teacher with id: {teacher_id} does not exist!"}
     
 
 # # POST /students
