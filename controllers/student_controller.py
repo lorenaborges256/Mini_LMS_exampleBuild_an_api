@@ -70,27 +70,46 @@ def create_students():
     data = student_schema.dump(new_student)
     #calling data to convert with jsonify
     return jsonify(data) , 201
+# # Types of error
+# fields can not be empty
+# email must be unique
+# defaults errors - unexpected errors occured
+# 404 - not found
 
 
+# DELETE /students/id
+@students_bp.route("/<int:student_id>", methods=["DELETE"])
+def delete_student(student_id):
+    #find the student by id: select * from students where student_id=student_id;
+    stmt = db.select(Student).where(Student.student_id == student_id)
+    student = db.session.scalar(stmt)
 
-# # PUT/PATCH /students/id
-# # DELETE /students/id
-# @students_bp.route("/<int:student_id>", methods=["DELETE"])
-# def delete_student(student_id):
-#     #find the student by id
-#     stmt = db.select(Student).where(Student.id == student_id)
-#     student = db.session.scalar(stmt)
+    #if student exists:
+    if student:
+        #delete
+        name = student.name
+        db.session.delete(student)
+        #commit
+        db.session.commit()
+        #return ack
+        return {"message": f"Student with name {student.name} has been deleted successfully."},200
 
-#     #if student exists:
+    else: 
+        #return ack no record found
+        return {"message": f"Student with id {student_id} does not exist."}, 404
+     
 
-#     if student:
-#     #delete
-#     name = student.name
-#     db.session.delete(student)
-#     #commit
-#     db.session.commit()
-#     #return ack
-#     return {"message": f"Student {student.name} has been deleted successfully."},200
-
-#     #else
-#      #return ack no record found
+# PUT/PATCH /students/id (EDIT the student details)
+@students_bp.route("/<int:student_id>", methods=["PUT", "PATCH"])
+def edit_student(student_id):
+    #Get the std from db first
+    #define statemnet
+    #exc the stmt
+    
+    #if the std exists
+        #fetch the info from the request body
+        # make the changes
+        #commit to the db
+        # ack
+    #else
+        # ack no record found
