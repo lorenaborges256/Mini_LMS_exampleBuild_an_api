@@ -15,7 +15,7 @@ def get_teachers():
     department = request.args.get('department')
     if department:
         #define a statement: Select * from teachers where department='something/science/math';
-        stmt = db.select(Teacher).where(Teacher.department == department)
+        stmt = db.select(Teacher).where(Teacher.department == department).order_by(Teacher.teacher_id)
     else:
         stmt = db.select(Teacher)
 
