@@ -11,8 +11,16 @@ teachers_bp = Blueprint('teachers', __name__, url_prefix='/teachers')
 # GET/teachers
 @teachers_bp.route('/')
 def get_teachers():
+    #Get the department name from URL
+    department = request.args.get('department')
+    if department:
+        #define a statement: Select * from teachers where department='something/science/math';
+        stmt = db.select(Teacher).where(Teacher.department == department)
+    else:
+        stmt = db.select(Teacher)
+
     #first define a statement: Select * from teachers;
-    stmt = db.select(Teacher)
+    # stmt = db.select(Teacher)
     #execute it
     teachers_list = db.session.scalars(stmt)
     #serialise it
@@ -23,7 +31,7 @@ def get_teachers():
     else:
         return {"message": "No record found. Add a teachers to get started with system..."}
 
-# GET /teachers/id
+# READ - GET /teacher and GET /teachers/id
 @teachers_bp.route("/<int:teacher_id>")
 def get_teachers_byid(teacher_id):
     #define the statement: select * from teachers where id=student_id;
@@ -100,7 +108,7 @@ def delete_teacher(teacher_id):
         return {"message": f"Teacher with id {teacher_id} does not exist."}, 404
      
 
-# PUT/PATCH /teachers/id (EDIT the teaqcher details)
+# PUT/PATCH /teachers/id (EDIT the teacher details)
 @teachers_bp.route("/<int:teacher_id>", methods=["PUT", "PATCH"])
 def edit_teacher(teacher_id):
     # try:

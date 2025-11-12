@@ -5,7 +5,7 @@ class Course(db.Model):
     __tablename__ = 'courses'
     course_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
-    duration = db.Column(db.String(100), nullable=False)
+    duration = db.Column(db.String(100))
     
 
     #foreign key Addition / connecting teachers table here
