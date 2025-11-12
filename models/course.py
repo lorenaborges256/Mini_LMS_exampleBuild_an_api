@@ -16,7 +16,7 @@ class CourseSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Course
         load_instance = True
-        incluse_fk = True
+        include_fk = True
 
 #object defined
 course_schema = CourseSchema()
