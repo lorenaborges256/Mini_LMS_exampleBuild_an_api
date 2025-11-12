@@ -55,7 +55,7 @@ def seed_tables():
 
     #adding teachers to the session
     db.session.add_all(teachers)
-    
+    db.session.commit()
     #COURSE create an instance of the Model first
     courses = [
         Course(
